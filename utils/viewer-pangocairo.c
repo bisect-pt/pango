@@ -27,6 +27,7 @@
 #include <pango/pangocairo.h>
 
 static int opt_annotate = 0;
+static const char **opt_font_file = NULL;
 
 typedef struct
 {
@@ -48,8 +49,18 @@ pangocairo_view_create (const PangoViewer *klass G_GNUC_UNUSED)
 
   instance->backend = cairo_viewer_iface_create (&instance->iface);
 
-  instance->fontmap = pango_cairo_font_map_new ();
-  pango_cairo_font_map_set_resolution (PANGO_CAIRO_FONT_MAP (instance->fontmap), opt_dpi);
+  if (opt_font_file != NULL)
+    {
+      instance->fontmap = PANGO_FONT_MAP (pango_simple_font_map_new ());
+      pango_simple_font_map_set_resolution (PANGO_SIMPLE_FONT_MAP (instance->fontmap), opt_dpi);
+      for (int i = 0; opt_font_file[i]; i++)
+        pango_simple_font_map_add_file (PANGO_SIMPLE_FONT_MAP (instance->fontmap), opt_font_file[i], 0);
+    }
+  else
+    {
+      instance->fontmap = pango_cairo_font_map_new ();
+      pango_cairo_font_map_set_resolution (PANGO_CAIRO_FONT_MAP (instance->fontmap), opt_dpi);
+    }
 
   instance->font_options = cairo_font_options_create ();
   if (opt_hinting != HINT_DEFAULT)
@@ -796,6 +807,7 @@ pangocairo_view_get_option_group (const PangoViewer *klass G_GNUC_UNUSED)
   GOptionEntry entries[] =
   {
     {"annotate", 0, 0, G_OPTION_ARG_CALLBACK, parse_annotate_arg, annotate_arg_help, "FLAGS"},
+    {"font-file", 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &opt_font_file, "Font file to use", "FILE"},
     {NULL}
   };
   GOptionGroup *group;
