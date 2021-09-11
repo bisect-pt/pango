@@ -262,6 +262,19 @@ pango_matrix_get_font_scale_factors (const PangoMatrix *matrix,
     *yscale = minor;
 }
 
+double
+pango_matrix_get_slant_ratio (const PangoMatrix *matrix)
+{
+  double x, y;
+
+  x = 0;
+  y = 1;
+
+  pango_matrix_transform_distance (matrix, &x, &y);
+
+  return  - x / y;
+}
+
 /**
  * pango_matrix_transform_distance:
  * @matrix: (nullable): a `PangoMatrix`
