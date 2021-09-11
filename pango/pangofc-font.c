@@ -947,9 +947,11 @@ pango_fc_font_create_hb_font (PangoFont *font)
   double x_scale_inv, y_scale_inv;
   double x_scale, y_scale;
   double size;
+  double slant;
 
   x_scale_inv = y_scale_inv = 1.0;
   size = 1.0;
+  slant = 0.0;
 
   key = _pango_fc_font_get_font_key (fc_font);
   if (key)
@@ -974,6 +976,7 @@ pango_fc_font_create_hb_font (PangoFont *font)
       matrix2.xy = fc_matrix.xy;
       matrix2.yy = fc_matrix.yy;
       pango_matrix_get_font_scale_factors (&matrix2, &x, &y);
+      slant = pango_matrix_get_slant_ratio (&matrix2);
 
       x_scale_inv /= x;
       y_scale_inv /= y;
@@ -996,6 +999,7 @@ pango_fc_font_create_hb_font (PangoFont *font)
   hb_font_set_scale (hb_font,
                      size * PANGO_SCALE * x_scale,
                      size * PANGO_SCALE * y_scale);
+  //hb_set_synthetic_slant (hb_font, slant);
 
   if (key)
     {
