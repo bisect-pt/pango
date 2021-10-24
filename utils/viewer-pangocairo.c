@@ -51,10 +51,26 @@ pangocairo_view_create (const PangoViewer *klass G_GNUC_UNUSED)
 
   if (opt_font_file != NULL)
     {
+      PangoFontFamily *fam;
+
       instance->fontmap = PANGO_FONT_MAP (pango_simple_font_map_new ());
       pango_simple_font_map_set_resolution (PANGO_SIMPLE_FONT_MAP (instance->fontmap), opt_dpi);
       for (int i = 0; opt_font_file[i]; i++)
         pango_simple_font_map_add_file (PANGO_SIMPLE_FONT_MAP (instance->fontmap), opt_font_file[i], 0);
+
+      fam = pango_font_map_get_family (instance->fontmap, "Cantarell");
+      if (fam)
+        {
+          PangoFontFace *face = pango_font_family_get_face (fam, "Regular");
+          PangoHbFace *slanted;
+          PangoMatrix matrix = { 1., -0.2,
+                                 0., 1.,
+                                 0., 0. };
+
+          slanted = pango_hb_face_new_transformed (PANGO_HB_FACE (face), "Italic", &matrix);
+          pango_simple_font_map_add_face (PANGO_SIMPLE_FONT_MAP (instance->fontmap), slanted);
+          g_object_unref (slanted);
+        }
     }
   else
     {
