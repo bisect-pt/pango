@@ -70,6 +70,12 @@ pangocairo_view_create (const PangoViewer *klass G_GNUC_UNUSED)
           slanted = pango_hb_face_new_transformed (PANGO_HB_FACE (face), "Italic", &matrix);
           pango_simple_font_map_add_face (PANGO_SIMPLE_FONT_MAP (instance->fontmap), slanted);
           g_object_unref (slanted);
+
+          matrix = (PangoMatrix) { 0.5, 0., 0., 1., 0., 0. };
+
+          slanted = pango_hb_face_new_transformed (PANGO_HB_FACE (face), "Condensed", &matrix);
+          pango_simple_font_map_add_face (PANGO_SIMPLE_FONT_MAP (instance->fontmap), slanted);
+          g_object_unref (slanted);
         }
 
       fam = pango_font_map_get_family (instance->fontmap, "Liberation Mono");
