@@ -28,6 +28,7 @@ pango_sources = [
   'reorder-items.c',
   'shape.c',
   'pango-hbface.c',
+  'pango-hbfont.c',
 ]
 
 pango_headers = [
@@ -58,6 +59,7 @@ pango_headers = [
   'pango-types.h',
   'pango-utils.h',
   'pango-hbface.h',
+  'pango-hbfont.h',
 ]
 
 pango_installed_headers = pango_headers + [ 'pango-version-macros.h' ]
