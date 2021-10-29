@@ -29,6 +29,7 @@ pango_sources = [
   'shape.c',
   'pango-hbface.c',
   'pango-hbfont.c',
+  'pango-simple-family.c',
 ]
 
 pango_headers = [
