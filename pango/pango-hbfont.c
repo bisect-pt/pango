@@ -661,7 +661,8 @@ pango_hb_font_new (PangoHbFace       *face,
 
   self->size = size;
   self->variations = g_strdup (variations);
-  self->gravity = gravity;
+  if (gravity != PANGO_GRAVITY_AUTO)
+    self->gravity = gravity;
   if (matrix)
     self->matrix = *matrix;
 

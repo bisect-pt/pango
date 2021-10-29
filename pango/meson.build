@@ -30,6 +30,7 @@ pango_sources = [
   'pango-hbface.c',
   'pango-hbfont.c',
   'pango-simple-family.c',
+  'pango-simple-fontmap.c',
 ]
 
 pango_headers = [
@@ -61,6 +62,7 @@ pango_headers = [
   'pango-utils.h',
   'pango-hbface.h',
   'pango-hbfont.h',
+  'pango-simple-fontmap.h',
 ]
 
 pango_installed_headers = pango_headers + [ 'pango-version-macros.h' ]
