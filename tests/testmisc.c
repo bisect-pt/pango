@@ -736,6 +736,38 @@ test_transform_rectangle (void)
   g_assert_cmpint (rect2.height, ==, rect.width);
 }
 
+static void
+test_hbfont_monospace (void)
+{
+  PangoSimpleFontMap *map;
+  PangoFontFamily *family;
+
+  map = pango_simple_font_map_new ();
+
+  if (g_file_test ("/usr/share/fonts/cantarell/Cantarell-VF.otf", G_FILE_TEST_EXISTS))
+    {
+      pango_simple_font_map_add_file (map, "/usr/share/fonts/cantarell/Cantarell-VF.otf", 0);
+
+      family = pango_font_map_get_family (PANGO_FONT_MAP (map), "Cantarell");
+
+      g_assert_nonnull (family);
+      g_assert_true (pango_font_family_is_variable (family));
+      g_assert_false (pango_font_family_is_monospace (family));
+    }
+
+  if (g_file_test ("/usr/share/fonts/dejavu-mono-sans-mono-fonts/DejaVuSansMono.ttf", G_FILE_TEST_EXISTS))
+    {
+      pango_simple_font_map_add_file (map, "/usr/share/fonts/dejavu-sans-mono-fonts/DejaVuSansMono.ttf", 0);
+      family = pango_font_map_get_family (PANGO_FONT_MAP (map), "DejaVu Sans Mono");
+
+      g_assert_nonnull (family);
+      g_assert_false (pango_font_family_is_variable (family));
+      g_assert_true (pango_font_family_is_monospace (family));
+    }
+
+  g_object_unref (map);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -769,6 +801,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/layout/empty-line-height", test_empty_line_height);
   g_test_add_func ("/layout/gravity-metrics", test_gravity_metrics);
   g_test_add_func ("/matrix/transform-rectangle", test_transform_rectangle);
+  g_test_add_func ("/hbfont/monospace", test_hbfont_monospace);
 
   return g_test_run ();
 }
